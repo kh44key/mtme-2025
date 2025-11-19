@@ -137,4 +137,3 @@ const [status, setStatus] = useState<"idle" | "uploading" | "success" | "error">
       </div>
     </div>
   );
-}
