@@ -24,6 +24,22 @@ body{
     background: var(--accent);
     color: white;
   }
+
+   html {
+    font-size: 16px;
+  }
+  h1 {
+    @apply text-5xl md:text-6xl font-bold;
+  }
+  h2 {
+    @apply text-3xl md:text-4xl font-bold;
+  }
+  h3 {
+    @apply text-xl font-semibold;
+  }
+  p, li, span, div {
+    @apply text-base leading-relaxed;
+  }
 }
 
 /* Footer specific */

@@ -1,73 +1,140 @@
-"use client";
-
+// src/app/submission/page.tsx
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Upload, FileText, CheckCircle } from "lucide-react";
 import { useState } from "react";
-import Link from "next/link";
 
-export default function SubmissionPage() {
-  const [file, setFile] = useState<File | null>(null);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState<string | null>(null);
+const [status, setStatus] = useState<"idle" | "uploading" | "success" | "error">("idle");
 
-  async function submitToSelf(e: React.FormEvent) {
-    e.preventDefault();
-    if (!file) { setMsg("Please select a PDF."); return; }
-    setLoading(true);
-    setMsg(null);
-    const fd = new FormData();
-    fd.append("paper", file);
-    fd.append("name", name);
-    fd.append("email", email);
+  const tracks = [
+    "Advanced Materials and Nanotechnology",
+    "Energy and Environmental Materials",
+    "Manufacturing and Processing Technologies",
+    "AI and Computational Applications",
+    "Structural Analysis",
+    "Robotics and Control Systems",
+    "Electrochemistry and Surface Science",
+    "Sustainable Technologies and Recycling",
+    "Thermal and Fluid Systems",
+    "Aerospace and Automotive Applications",
+  ];
+
+  async function handleSubmit(formData: FormData) {
+    setStatus("uploading");
 
     try {
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error || "Upload failed");
-      setMsg("Upload successful. Reference: " + data.path);
-    } catch (err: any) {
-      setMsg("Upload error: " + (err.message || err));
-    } finally {
-      setLoading(false);
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        setStatus("success");
+      } else {
+        setStatus("error");
+      }
+    } catch (err) {
+      setStatus("error");
     }
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-16">
-      <h1 className="text-3xl font-bold mb-4">Paper Submission</h1>
-      <p className="mb-6">We recommend submitting via EasyChair. If you prefer, you can upload a PDF directly below.</p>
+    <div className="min-h-screen bg-gray-50 py-16 pt-32">
+      <div className="container mx-auto px-6 max-w-3xl">
+        <Card className="shadow-xl">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl font-bold">Submit Your Paper</CardTitle>
+            <CardDescription className="text-base mt-2">
+              Upload your abstract or full paper (PDF only, max 10MB)
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form action={handleSubmit} className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Full Name</Label>
+                  <Input id="name" name="name" required placeholder="Dr. Ahmed Khan" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" name="email" type="email" required placeholder="ahmed@giki.edu.pk" />
+                </div>
+              </div>
 
-      <div className="mb-8 flex gap-4">
-        <a href="https://easychair.org/account2/signin" target="_blank" rel="noreferrer" className="px-5 py-3 bg-[#5b3410] text-white rounded-md">Login to EasyChair</a>
-        <Link href="/" className="px-5 py-3 border rounded-md">Back to Home</Link>
+              <div className="space-y-2">
+                <Label htmlFor="title">Paper Title</Label>
+                <Input id="title" name="title" required placeholder="Enter your paper title" />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="track">Track</Label>
+                <Select name="track" required>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select conference track" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {tracks.map((track) => (
+                      <SelectItem key={track} value={track}>
+                        {track}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="file">Upload PDF File (max 10MB)</Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition">
+                  <input
+                    type="file"
+                    id="file"
+                    name="file"
+                    accept=".pdf"
+                    required
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file && file.size > 10 * 1024 * 1024) {
+                        alert("File too large! Max 10MB");
+                        e.target.value = "";
+                      }
+                    }}
+                  />
+                  <label htmlFor="file" className="cursor-pointer">
+                    <Upload className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+                    <p className="text-sm text-gray-600">Click to upload or drag and drop</p>
+                    <p className="text-xs text-gray-500 mt-2">PDF only, max 10MB</p>
+                  </label>
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full"
+                disabled={status === "uploading"}
+              >
+                {status === "uploading" ? "Uploading..." : "Submit Paper"}
+                {status === "success" && <CheckCircle className="ml-2 w-5 h-5" />}
+              </Button>
+
+              {status === "success" && (
+                <p className="text-green-600 text-center font-medium">
+                  Paper submitted successfully! Thank you.
+                </p>
+              )}
+              {status === "error" && (
+                <p className="text-red-600 text-center font-medium">
+                  Upload failed. Please try again.
+                </p>
+              )}
+            </form>
+          </CardContent>
+        </Card>
       </div>
-
-      <hr className="my-6"/>
-
-      <form onSubmit={submitToSelf} className="space-y-4 bg-white p-6 rounded-md shadow">
-        <div>
-          <label className="block mb-1">Name</label>
-          <input value={name} onChange={(e)=>setName(e.target.value)} className="w-full border px-3 py-2 rounded" required />
-        </div>
-
-        <div>
-          <label className="block mb-1">Email</label>
-          <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} className="w-full border px-3 py-2 rounded" required />
-        </div>
-
-        <div>
-          <label className="block mb-1">Paper (PDF)</label>
-          <input type="file" accept="application/pdf" onChange={(e)=>setFile(e.target.files?.[0] ?? null)} />
-        </div>
-
-        <div>
-          <button type="submit" disabled={loading} className="px-4 py-2 rounded bg-[#5b3410] text-white">
-            {loading ? "Uploading..." : "Upload PDF (to site)"}
-          </button>
-        </div>
-
-        {msg && <p className="mt-2 text-sm">{msg}</p>}
-      </form>
     </div>
   );
 }
