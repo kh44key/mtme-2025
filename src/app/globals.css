@@ -1,3 +1,34 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Optional: Smooth scrolling & better font rendering */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply min-h-screen antialiased;
+}
+
+/* Optional but recommended: Custom container (you can remove if you don't use it) */
+.container {
+  @apply max-w-7xl mx-auto px-6 lg:px-8;
+}
+
+/* Fix for shadcn/ui components on dark overlays (optional) */
+@layer components {
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+}
+
+/* Remove default focus outlines (shadcn/ui handles its own) */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2 ring-offset-transparent;
+}
