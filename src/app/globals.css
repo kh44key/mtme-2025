@@ -1,8 +1,4 @@
+/** @type {import('tailwindcss').Config} */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* ONLY THIS ONE LINE — nothing else */
-.hero-gradient {
-  background: linear-gradient(135deg, #1E40AF 0%, #059669 50%, #0EA5E9 100%);
-}
