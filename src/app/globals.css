@@ -2,25 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* This line is REQUIRED for border-border, bg-background etc. to work */
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-  }
-}
-
-/* This fixes the error */
-@layer components {
-  .border-border {
-    @apply border-border;
-  }
-}
-
-/* Your custom gradient */
+/* Custom hero gradient - this is the only thing we need */
 .hero-gradient {
   background: linear-gradient(135deg, #1E40AF 0%, #059669 50%, #0EA5E9 100%);
+}
+
+/* Optional: slightly better focus rings (looks pro) */
+@layer utilities {
+  .focus-ring {
+    @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+  }
 }
