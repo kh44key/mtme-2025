@@ -1,4 +1,6 @@
+// app/page.tsx
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, MapPin } from "lucide-react";
@@ -20,10 +22,20 @@ export default function Home() {
 
   return (
     <>
-      {/* HERO SECTION */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden hero-gradient">
-        {/* Subtle background dots */}
-        <div className="absolute inset-0 opacity-10">
+      {/* HERO SECTION – WITH YOUR REAL BACKGROUND IMAGE */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <Image
+          src="/assets/banner.png"
+          alt="MTME 2025 - GIK Institute"
+          fill
+          priority
+          quality={95}
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/60"></div>
+
+        {/* Subtle dots overlay */}
+        <div className="absolute inset-0 opacity-20">
           <div
             className="absolute inset-0"
             style={{
@@ -39,22 +51,14 @@ export default function Home() {
           transition={{ duration: 0.9, ease: "easeOut" }}
           className="container mx-auto px-6 text-center relative z-10"
         >
-          {/* Logo + Title */}
-          <div className="flex flex-col items-center mb-10">
-            <div className="h-20 w-20 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md mb-6 border border-white/30">
-              <span className="text-3xl font-black text-white">GIK</span>
-            </div>
-            <h1 className="text-6xl md:text-8xl font-black bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent leading-tight">
-              MTME-2025
-            </h1>
-          </div>
-
+          <h1 className="text-6xl md:text-8xl font-black text-white drop-shadow-2xl leading-tight mb-6">
+            MTME–2025
+          </h1>
           <p className="text-2xl md:text-4xl font-light text-white/95 max-w-5xl mx-auto mb-10 leading-relaxed">
             3rd International Conference on Modern Technologies<br className="hidden md:block" />
             in Mechanical & Materials Engineering
           </p>
 
-          {/* Date & Venue Pills */}
           <div className="flex flex-col md:flex-row gap-6 justify-center mb-12 text-white/90">
             <div className="flex items-center gap-4 px-8 py-5 bg-white/10 rounded-2xl backdrop-blur-md border border-white/20">
               <Calendar className="w-9 h-9" />
@@ -66,12 +70,10 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Concluded Badge */}
           <div className="inline-flex items-center gap-3 px-8 py-4 mb-12 text-2xl font-bold bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-100 rounded-full border border-amber-300/40 backdrop-blur-md">
-            Trophy Event Successfully Concluded – Thank You!
+            Event Successfully Concluded – Thank You!
           </div>
 
-          {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button
               size="lg"
