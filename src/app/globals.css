@@ -1,10 +1,7 @@
-@import "tailwindcss/base";
-@import "tailwindcss/utilities";
-@import "tailwindcss/components";
+/* Only this import works in Tailwind v4 */
+@import "tailwindcss";
 
-/* Remove tw-animate-css import — not Tailwind v4 compatible */
-/* Remove @custom-variant and @theme — Tailwind v4 does not support them */
-
+/* Your design tokens */
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -81,7 +78,7 @@
 @layer base {
   * {
     border-color: var(--border);
-    outline-color: color-mix(in oklch, var(--ring) 50%, transparent);
+    outline-color: var(--ring);
   }
   body {
     background: var(--background);
