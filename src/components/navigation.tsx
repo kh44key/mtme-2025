@@ -36,6 +36,9 @@ export function Navigation() {
             <Link href="/contact" className="hover:text-blue-600 transition">
               Contact
             </Link>
+            <Link href="/upload" className="hover:text-blue-600 transition">
+            Upload Paper
+            </Link>
           </nav>
         </div>
       </div>
